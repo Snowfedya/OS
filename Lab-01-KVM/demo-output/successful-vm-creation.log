@@ -1,0 +1,50 @@
+# Пример успешного создания VM
+
+$ sudo virt-install \
+  --name lab1-vm1 \
+  --ram 1024 \
+  --vcpus 1 \
+  --disk path=/var/lib/libvirt/images/lab1-vm1.qcow2,device=disk,bus=virtio \
+  --os-variant ubuntu22.04 \
+  --network network=default,model=virtio \
+  --graphics none \
+  --console pty,target_type=serial \
+  --import \
+  --noautoconsole
+
+Starting install...
+Creating domain...                                                              |    0 B  00:00:00     
+Domain creation completed.
+
+$ virsh list --all
+ Id   Name        State
+-----------------------------
+ 1    kvm-lab-vm  running
+ 2    lab1-vm1    running
+
+$ virsh dominfo lab1-vm1
+Id:             2
+Name:           lab1-vm1
+UUID:           a1b2c3d4-e5f6-7890-1234-567890abcdef
+OS Type:        hvm
+State:          running
+CPU(s):         1
+CPU time:       15.3s
+Max memory:     1048576 KiB
+Used memory:    1048576 KiB
+Persistent:     yes
+Autostart:      disable
+Managed save:   no
+Security model: apparmor
+Security DOI:   0
+Security label: libvirt-a1b2c3d4-e5f6-7890-1234-567890abcdef (enforcing)
+
+$ virsh domblklist lab1-vm1
+ Target   Source
+-------------------------------------------------------
+ vda      /var/lib/libvirt/images/lab1-vm1.qcow2
+ 
+$ virsh domiflist lab1-vm1
+ Interface   Type      Source    Model    MAC
+---------------------------------------------------------------
+ vnet1       network   default   virtio   52:54:00:12:34:56

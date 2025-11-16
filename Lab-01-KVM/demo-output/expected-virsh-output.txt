@@ -1,0 +1,81 @@
+# Примеры вывода команд virsh
+
+## virsh list --all
+ Id   Name         State
+------------------------------
+ 1    kvm-lab-vm   running
+ 2    lab1-vm1     running
+ -    test-vm      shut off
+
+## virsh net-list
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+
+## virsh pool-list
+ Name      State    Autostart
+-------------------------------
+ default   active   yes
+
+## virsh version
+Compiled against library: libvirt 8.0.0
+Using library: libvirt 8.0.0
+Using API: QEMU 8.0.0
+Running hypervisor: QEMU 6.2.0
+
+## virsh nodeinfo
+CPU model:           x86_64
+CPU(s):              8
+CPU frequency:       2400 MHz
+CPU socket(s):       1
+Core(s) per socket:  4
+Thread(s) per core:  2
+NUMA cell(s):        1
+Memory size:         16384000 KiB
+
+## virsh domstats kvm-lab-vm
+Domain: 'kvm-lab-vm'
+  state.state=1
+  state.reason=1
+  cpu.time=352891234567
+  cpu.user=125678901234
+  cpu.system=45123456789
+  balloon.current=2097152
+  balloon.maximum=2097152
+  vcpu.current=2
+  vcpu.maximum=2
+  vcpu.0.state=1
+  vcpu.0.time=176445617283
+  vcpu.1.state=1
+  vcpu.1.time=176445617284
+  net.count=1
+  net.0.name=vnet0
+  net.0.rx.bytes=1234567890
+  net.0.rx.pkts=98765
+  net.0.tx.bytes=9876543210
+  net.0.tx.pkts=123456
+  block.count=1
+  block.0.name=vda
+  block.0.path=/var/lib/libvirt/images/kvm-lab-vm.qcow2
+  block.0.rd.reqs=456789
+  block.0.rd.bytes=12345678901
+  block.0.wr.reqs=234567
+  block.0.wr.bytes=6789012345
+
+## virsh vcpupin kvm-lab-vm
+ VCPU   CPU Affinity
+-------------------------
+ 0      0-7
+ 1      0-7
+
+## virsh schedinfo kvm-lab-vm
+Scheduler      : posix
+cpu_shares     : 1024
+vcpu_period    : 100000
+vcpu_quota     : -1
+emulator_period: 100000
+emulator_quota : -1
+global_period  : 100000
+global_quota   : -1
+iothread_period: 100000
+iothread_quota : -1
