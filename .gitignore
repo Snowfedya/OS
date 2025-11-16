@@ -1,0 +1,5 @@
+# Ignore Vagrant's local machine-specific state
+.vagrant/
+
+# Ignore log files
+*.log

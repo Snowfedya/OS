@@ -1,0 +1,16 @@
+<!--
+This XML file defines a virtual network for libvirt named 'hostonly'.
+It creates an isolated network on the 192.168.100.0/24 subnet,
+which is ideal for host-only communication between VMs managed by KVM.
+The bridge 'virbr2' is automatically created by libvirt.
+-->
+<network>
+  <name>hostonly</name>
+  <bridge name='virbr2'/>
+  <forward mode='nat'/>
+  <ip address='192.168.100.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='192.168.100.128' end='192.168.100.254'/>
+    </dhcp>
+  </ip>
+</network>

@@ -1,0 +1,39 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.hostname = "lxc-host"
+
+  # Provider-specific configuration for VirtualBox
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "lxc-host"
+    vb.memory = "4096"
+    vb.cpus = "2"
+
+    # CRUCIAL: Enable Nested VT-x/AMD-V. While not strictly required for LXC/LXD
+    # as it is for KVM, it's a good practice for virtualization hosts.
+    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
+  end
+
+  # Provisioning script to install classic LXC and modern LXD
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "Updating package lists..."
+    apt-get update -y
+
+    echo "Installing classic LXC and templates..."
+    apt-get install -y lxc lxc-templates
+
+    echo "Installing snapd..."
+    apt-get install -y snapd
+
+    echo "Installing LXD via snap..."
+    snap install lxd
+
+    echo "Initializing LXD with default settings..."
+    # The --auto flag accepts all the defaults, making setup non-interactive.
+    lxd init --auto
+
+    echo "Provisioning complete."
+  SHELL
+end

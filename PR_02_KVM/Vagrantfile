@@ -1,0 +1,44 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/jammy64"
+  config.vm.hostname = "kvm-host"
+
+  # Provider-specific configuration for VirtualBox
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "kvm-host"
+    vb.memory = "4096"
+    vb.cpus = "2"
+
+    # CRUCIAL: Enable Nested VT-x/AMD-V for KVM
+    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
+  end
+
+  # Forward Cockpit port 9090 to host
+  config.vm.network "forwarded_port", guest: 9090, host: 9090
+
+  # Provisioning script to install KVM, libvirt, and Cockpit
+  config.vm.provision "shell", inline: <<-SHELL
+    echo "Updating package lists..."
+    apt-get update -y
+
+    echo "Installing KVM, libvirt, and Cockpit..."
+    apt-get install -y qemu-kvm libvirt-daemon-system libvirt-clients virtinst cockpit cockpit-machines
+
+    echo "Starting and enabling services..."
+    systemctl start libvirtd
+    systemctl enable libvirtd
+    systemctl start cockpit.socket
+    systemctl enable cockpit.socket
+
+    echo "Adding 'vagrant' user to 'libvirt' and 'kvm' groups..."
+    usermod -aG libvirt vagrant
+    usermod -aG kvm vagrant
+
+    echo "Configuring firewall to allow Cockpit..."
+    ufw allow 9090
+
+    echo "Provisioning complete. You may need to 'vagrant reload' for group changes to take full effect."
+  SHELL
+end
