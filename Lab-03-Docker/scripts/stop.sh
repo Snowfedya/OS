@@ -6,9 +6,9 @@
 cd "$(dirname "$0")/.."
 
 echo "Stopping Docker stack..."
-docker-compose down
+docker compose down
 
 echo ""
 echo "✓ Stack stopped"
 echo ""
-echo "To remove volumes: docker-compose down -v"
+echo "To remove volumes: docker compose down -v"

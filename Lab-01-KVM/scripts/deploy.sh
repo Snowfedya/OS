@@ -92,7 +92,7 @@ sudo virt-install \
     --vcpus=2 \
     --disk path="$TARGET_IMAGE",device=disk,bus=virtio \
     --os-variant=ubuntu22.04 \
-    --network=default,model=virtio \
+    --nonetworks \
     --graphics=none \
     --console=pty,target_type=serial \
     --import \

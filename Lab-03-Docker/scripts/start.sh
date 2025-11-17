@@ -15,7 +15,7 @@ echo -e "${GREEN}=== Starting Docker Stack ===${NC}"
 echo ""
 
 echo -e "${YELLOW}Starting services with docker-compose...${NC}"
-docker-compose up -d
+docker compose up -d
 
 echo ""
 echo "Waiting for services to be healthy..."
@@ -25,7 +25,7 @@ echo ""
 echo -e "${GREEN}✓ Stack started${NC}"
 echo ""
 
-docker-compose ps
+docker compose ps
 
 echo ""
 echo "Service URLs:"

@@ -1,0 +1,6 @@
+# Use the official lightweight PostgreSQL image
+FROM postgres:15-alpine
+
+# Set the healthcheck
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
+  CMD pg_isready -U "labuser" -d "labdb" || exit 1
