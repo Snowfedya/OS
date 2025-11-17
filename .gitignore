@@ -1,0 +1,13 @@
+# Ignore Vagrant state
+.vagrant/
+
+# Ignore large image files
+**/images/
+*.qcow2
+*.img
+
+# Ignore log files
+*.log
+
+# Ignore node_modules
+**/node_modules/

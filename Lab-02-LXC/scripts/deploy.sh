@@ -12,7 +12,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m'
 
 CONTAINER_NAME="lxc-lab-container"
-IMAGE="ubuntu:22.04"
+IMAGE="ubuntu/jammy"
 
 echo -e "${GREEN}=== LXD Container Deployment ===${NC}"
 echo ""
@@ -40,8 +40,10 @@ if lxc list | grep -q "$CONTAINER_NAME"; then
     fi
 fi
 
+lxc remote add images images.linuxcontainers.org || true
+
 echo -e "${YELLOW}[3/4] Создание контейнера из образа $IMAGE...${NC}"
-lxc launch $IMAGE $CONTAINER_NAME
+lxc launch images:$IMAGE $CONTAINER_NAME -n ""
 
 echo "Ожидание запуска контейнера..."
 sleep 5
@@ -54,21 +56,7 @@ else
     exit 1
 fi
 
-echo -e "${YELLOW}[4/4] Базовая настройка контейнера...${NC}"
-
-# Обновление пакетов
-lxc exec $CONTAINER_NAME -- bash -c "apt-get update -qq && apt-get upgrade -y -qq"
-
-# Установка полезных инструментов
-lxc exec $CONTAINER_NAME -- apt-get install -y -qq \
-    curl \
-    wget \
-    vim \
-    htop \
-    net-tools \
-    iputils-ping \
-    stress-ng \
-    openssh-server
+echo -e "${YELLOW}[4/4] Базовая настройка контейнера... (сетевые команды пропущены)${NC}"
 
 # Создание пользователя
 lxc exec $CONTAINER_NAME -- useradd -m -s /bin/bash ubuntu

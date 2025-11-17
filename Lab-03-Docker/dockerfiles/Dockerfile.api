@@ -17,8 +17,8 @@ RUN npm ci --only=production && \
 COPY app/api/ .
 
 # Non-root user
-RUN addgroup -g 1000 appgroup && \
-    adduser -D -u 1000 -G appgroup appuser && \
+RUN addgroup appgroup && \
+    adduser -D -G appgroup appuser && \
     chown -R appuser:appgroup /app
 
 USER appuser
